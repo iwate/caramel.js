@@ -47,6 +47,47 @@ a.bind("property2", (newVal) => {
 
 // TODO: Write description
 
+```
+<style type="text/css">
+	.template{
+		display: none;
+	}
+</style>
+<div id="a-template" class="template">
+	<h1 data-caramel-bind="innerText: model.property1"
+		data-caramel-event="click: onClick"></h1>
+</div>
+```
+
+```
+class AView extends Caramel.Model {
+	template: Caramel.ITemplate = new Caramel.HTMLTemplate("#a-template");
+	model: Caramel.Model = new A();
+	events = {
+		"rendered": "initialize"
+		, "mouseover h1": "onMouseOver"
+		, "mouseleave h1": "onMouseLeave"
+	}
+	initialize(){
+		this.model.property1 = "property1";
+		console.log(this.element.innerText); // "property1";
+	}
+	onMouseOver(){
+		this.element.style.color = "blue";
+	}
+	onMouseLeave(){
+		this.element.style.color = "black";
+	}
+	onClick(){
+		this.element.style.color = "red";
+	}
+}
+window.onload = function(){
+	new AView().renderTo(document.body);
+	new AView().renderTo(document.body);
+}
+```
+
 ##Sample
 
 // TODO: Write description
@@ -130,7 +171,7 @@ index.html
 </head>
 <body>
 	<div id="clock-template" class="template">
-		<h1 data-caramel-bind="innerText: current"
+		<h1 data-caramel-bind="innerText: model.current"
 			data-caramel-event="click: toggle"></h1>
 	</div>
 </body>
