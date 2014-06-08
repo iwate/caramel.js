@@ -35,7 +35,7 @@ module Caramel {
 	declare var __extends: (d, b)=>void;
 	export function Class(cstr:(...args:any[])=>void, props?:Object, statics?:Object, etnds?:(...args:any[])=>void){
 		var klass = function(...args:any[]){
-			this.super = etnds.bind(this);
+			this.super = etnds? etnds.bind(this) : null;
 			cstr.apply(this, args);
 		}
 		if(typeof etnds == "function"){
@@ -175,44 +175,37 @@ module Caramel {
 		private __bindAttrs__: Array<{element:HTMLElement; keys:string[]; values:string[]}> = [];
 		private __bindEvents__: Array<{element:HTMLElement; keys:string[]; values:string[]}> = [];
 		private __ownEvents__: Array<{trigger:string; callback: string}>;
-		private __modelEvents__:Array<{trigger:string; callback: string}>;
+		//private __modelEvents__:Array<{trigger:string; callback: string}>;
 		private __domEvents__: Array<{trigger:string; callback: string; target: string}>;
-		private _model: Model;
+		//private _model: Model;
 		element: HTMLElement;
 		template: ITemplate;
-		set model(model: Model){
-			this._model = model;
-			if(!!this.__modelEvents__){
-				this.__modelEvents__.forEach((event) => {
-	                this.model.addEventListener(event.trigger, this[event.callback]);
-	            });
-			}
-		}
-		get model(){
-			return this._model;
-		}
+		// set model(model: Model){
+		// 	this._model = model;
+		// 	if(!!this.__modelEvents__){
+		// 		this.__modelEvents__.forEach((event) => {
+	 //                this.model.addEventListener(event.trigger, this[event.callback]);
+	 //            });
+		// 	}
+		// }
+		// get model(){
+		// 	return this._model;
+		// }
 		set events(events: Object){
 			if(!Array.isArray(this["constructor"].prototype.__ownEvents__)){
 				this.__ownEvents__ = this["constructor"].prototype.__ownEvents__ = [];
-				this.__modelEvents__ = this["constructor"].prototype.__modelEvents__ = [];
+				//this.__modelEvents__ = this["constructor"].prototype.__modelEvents__ = [];
 				this.__domEvents__ = this["constructor"].prototype.__domEvents__ = [];
 				for(var key in events){
 					var trigger, array;
 	                array = key.split(/\s+/);
 	                trigger = array.shift();
 	                if (array.length > 0) {
-	                    if (array[0] === "model") {
-	                        this.__modelEvents__.push({
-	                            trigger: trigger,
-	                            callback: events[key]
-	                        });
-	                    } else {
-	                        this.__domEvents__.push({
-	                            trigger: trigger,
-	                            target: array.join(" "),
-	                            callback: events[key]
-	                        });
-	                    }
+	                    this.__domEvents__.push({
+                            trigger: trigger,
+                            target: array.join(" "),
+                            callback: events[key]
+                        });
 	                } else {
 	                    this.__ownEvents__.push({
 	                        trigger: trigger,
@@ -224,17 +217,9 @@ module Caramel {
 			this.__ownEvents__.forEach((event) => {
 	            this.addEventListener(event.trigger, this[event.callback]);
 	        });
-	        if (!!this.model) {
-	            this.__modelEvents__.forEach((event) => {
-	                this.model.addEventListener(event.trigger, this[event.callback]);
-	            });
-	        }
 		}
-		constructor(props: {model?:Model; element?:HTMLElement} = {}){
+		constructor(props: {element?:HTMLElement} = {}){
 			super();
-			if(!!props.model){
-				this.model = props.model;
-			}
 			if(!!props.element){
 				this.element = props.element;
 			}
@@ -309,13 +294,13 @@ module Caramel {
 	                var target = explorer(b.element, b.keys);
 	                target.object[target.key] = raw[1];
 	            } else {
-	                this.model.bind(b.values[0], (val) => {
+	                this[b.values[0]].bind(b.values[1], (val) => {
 	                    var target, value;
 	                    target = explorer(b.element, b.keys);
-	                    value = explorer(this.model, b.values);
+	                    value = explorer(this, b.values);
 	                    target.object[target.key] = value.object[value.key];
 	                });
-	                var value = explorer(this.model, b.values);
+	                var value = explorer(this, b.values);
 	                value.object[value.key] = value.object[value.key];
 	            }
 	        });
@@ -333,12 +318,12 @@ module Caramel {
 	        }
 	        
 	        this.__bindAttrs__.forEach((b) => {
-	            this.model.bind(b.values[0], (val) => {
+	            this[b.values[0]].bind(b.values[1], (val) => {
 	                var value;
-	                value = explorer(this.model, b.values);
+	                value = explorer(this, b.values);
 	                b.element.setAttribute(b.keys[0], value.object[value.key]);
 	            });
-	            var value = explorer(this.model, b.values);
+	            var value = explorer(this, b.values);
 	            value.object[value.key] = value.object[value.key];
 	        });
 	    }

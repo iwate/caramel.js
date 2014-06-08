@@ -46,7 +46,7 @@ var Caramel;
             for (var _i = 0; _i < (arguments.length - 0); _i++) {
                 args[_i] = arguments[_i + 0];
             }
-            this.super = etnds.bind(this);
+            this.super = etnds ? etnds.bind(this) : null;
             cstr.apply(this, args);
         };
         if (typeof etnds == "function") {
@@ -229,53 +229,39 @@ var Caramel;
                     return elem;
                 }
             };
-            if (!!props.model) {
-                this.model = props.model;
-            }
             if (!!props.element) {
                 this.element = props.element;
             }
         }
-        Object.defineProperty(View.prototype, "model", {
-            get: function () {
-                return this._model;
-            },
-            set: function (model) {
-                var _this = this;
-                this._model = model;
-                if (!!this.__modelEvents__) {
-                    this.__modelEvents__.forEach(function (event) {
-                        _this.model.addEventListener(event.trigger, _this[event.callback]);
-                    });
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(View.prototype, "events", {
+            // set model(model: Model){
+            // 	this._model = model;
+            // 	if(!!this.__modelEvents__){
+            // 		this.__modelEvents__.forEach((event) => {
+            //                this.model.addEventListener(event.trigger, this[event.callback]);
+            //            });
+            // 	}
+            // }
+            // get model(){
+            // 	return this._model;
+            // }
             set: function (events) {
                 var _this = this;
                 if (!Array.isArray(this["constructor"].prototype.__ownEvents__)) {
                     this.__ownEvents__ = this["constructor"].prototype.__ownEvents__ = [];
-                    this.__modelEvents__ = this["constructor"].prototype.__modelEvents__ = [];
+
+                    //this.__modelEvents__ = this["constructor"].prototype.__modelEvents__ = [];
                     this.__domEvents__ = this["constructor"].prototype.__domEvents__ = [];
                     for (var key in events) {
                         var trigger, array;
                         array = key.split(/\s+/);
                         trigger = array.shift();
                         if (array.length > 0) {
-                            if (array[0] === "model") {
-                                this.__modelEvents__.push({
-                                    trigger: trigger,
-                                    callback: events[key]
-                                });
-                            } else {
-                                this.__domEvents__.push({
-                                    trigger: trigger,
-                                    target: array.join(" "),
-                                    callback: events[key]
-                                });
-                            }
+                            this.__domEvents__.push({
+                                trigger: trigger,
+                                target: array.join(" "),
+                                callback: events[key]
+                            });
                         } else {
                             this.__ownEvents__.push({
                                 trigger: trigger,
@@ -287,11 +273,6 @@ var Caramel;
                 this.__ownEvents__.forEach(function (event) {
                     _this.addEventListener(event.trigger, _this[event.callback]);
                 });
-                if (!!this.model) {
-                    this.__modelEvents__.forEach(function (event) {
-                        _this.model.addEventListener(event.trigger, _this[event.callback]);
-                    });
-                }
             },
             enumerable: true,
             configurable: true
@@ -340,13 +321,13 @@ var Caramel;
                     var target = explorer(b.element, b.keys);
                     target.object[target.key] = raw[1];
                 } else {
-                    _this.model.bind(b.values[0], function (val) {
+                    _this[b.values[0]].bind(b.values[1], function (val) {
                         var target, value;
                         target = explorer(b.element, b.keys);
-                        value = explorer(_this.model, b.values);
+                        value = explorer(_this, b.values);
                         target.object[target.key] = value.object[value.key];
                     });
-                    var value = explorer(_this.model, b.values);
+                    var value = explorer(_this, b.values);
                     value.object[value.key] = value.object[value.key];
                 }
             });
@@ -365,12 +346,12 @@ var Caramel;
             }
 
             this.__bindAttrs__.forEach(function (b) {
-                _this.model.bind(b.values[0], function (val) {
+                _this[b.values[0]].bind(b.values[1], function (val) {
                     var value;
-                    value = explorer(_this.model, b.values);
+                    value = explorer(_this, b.values);
                     b.element.setAttribute(b.keys[0], value.object[value.key]);
                 });
-                var value = explorer(_this.model, b.values);
+                var value = explorer(_this, b.values);
                 value.object[value.key] = value.object[value.key];
             });
         };
