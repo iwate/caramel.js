@@ -1,0 +1,24 @@
+{
+  "name": "caramel.js",
+  "version": "0.0.1",
+  "description": "Light weight MVC framework written ",
+  "homepage": "https://github.com/iwate/caramel.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iwate/caramel.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iwate/caramel.js/issues"
+  },
+  "scripts": {
+    "start": "grunt watch"
+  },
+  "author": "_iwate",
+  "license": "MIT",
+  "devDependencies": {
+    "qunitjs": "^1.14.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-qunit": "^0.4.0"
+  }
+}
