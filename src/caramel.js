@@ -234,17 +234,6 @@ var Caramel;
             }
         }
         Object.defineProperty(View.prototype, "events", {
-            // set model(model: Model){
-            // 	this._model = model;
-            // 	if(!!this.__modelEvents__){
-            // 		this.__modelEvents__.forEach((event) => {
-            //                this.model.addEventListener(event.trigger, this[event.callback]);
-            //            });
-            // 	}
-            // }
-            // get model(){
-            // 	return this._model;
-            // }
             set: function (events) {
                 var _this = this;
                 if (!Array.isArray(this["constructor"].prototype.__ownEvents__)) {

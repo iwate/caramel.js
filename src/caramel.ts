@@ -175,22 +175,9 @@ module Caramel {
 		private __bindAttrs__: Array<{element:HTMLElement; keys:string[]; values:string[]}> = [];
 		private __bindEvents__: Array<{element:HTMLElement; keys:string[]; values:string[]}> = [];
 		private __ownEvents__: Array<{trigger:string; callback: string}>;
-		//private __modelEvents__:Array<{trigger:string; callback: string}>;
 		private __domEvents__: Array<{trigger:string; callback: string; target: string}>;
-		//private _model: Model;
 		element: HTMLElement;
 		template: ITemplate;
-		// set model(model: Model){
-		// 	this._model = model;
-		// 	if(!!this.__modelEvents__){
-		// 		this.__modelEvents__.forEach((event) => {
-	 //                this.model.addEventListener(event.trigger, this[event.callback]);
-	 //            });
-		// 	}
-		// }
-		// get model(){
-		// 	return this._model;
-		// }
 		set events(events: Object){
 			if(!Array.isArray(this["constructor"].prototype.__ownEvents__)){
 				this.__ownEvents__ = this["constructor"].prototype.__ownEvents__ = [];
