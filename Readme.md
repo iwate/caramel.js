@@ -204,15 +204,13 @@ var AView = Caramel.Class(function(){
 Clock sample in JavaScript
 
 ```
-var ClockTime = (function () {
-    function ClockTime() {
-        this.current = new Date();
-    }
-    ClockTime.prototype.toString = function () {
+var ClockTime = Caramel.Class(function(){
+    this.current = new Date();
+}, {
+    toString: function() {
         return this.current.getHours() + ":" + this.current.getMinutes() + ":" + this.current.getSeconds();
-    };
-    return ClockTime;
-})();
+    }
+});
 var Clock = Caramel.Class(function(){
     this.super({
         current: new ClockTime()
