@@ -178,7 +178,7 @@ index.html
 </html>
 ```
 
-## How to use Caramel in JavaScript?
+## How to use Caramel in JavaScript
 
 If you want use Caramel in JavaScript, you use Caramel.Class function.
 
