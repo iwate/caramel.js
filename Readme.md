@@ -60,7 +60,7 @@ a.bind("property2", (newVal) => {
 ```
 
 ```
-class AView extends Caramel.Model {
+class AView extends Caramel.View {
 	template: Caramel.ITemplate = new Caramel.HTMLTemplate("#a-template");
 	model: Caramel.Model = new A();
 	events = {
